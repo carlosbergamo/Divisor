@@ -38,7 +38,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 0 20px;
+            padding: 0 16px;
         }
 
         .container {
@@ -47,7 +47,7 @@
             background: var(--white);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-light);
-            padding: 24px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -65,12 +65,16 @@
 
         .form-group {
             display: flex;
-            align-items: flex-end;
-            gap: 16px;
+            flex-wrap: wrap; /* Permitir que los elementos se acomoden en varias filas */
+            gap: 8px;
         }
 
-        .form-group > div {
-            flex: 1;
+        .form-group > div, .form-group button {
+            flex: 1 1 calc(50% - 8px); /* Asegurar que cada elemento use el 50% del ancho disponible */
+        }
+
+        .reset-button {
+            flex: 1 1 calc(100% - 8px); /* Botón en una fila separada si no hay espacio */
         }
 
         .form-group button {
@@ -155,9 +159,7 @@
             color: var(--dark-gray);
         }
 
-        .btn-success {
-            background-color: var(--black);
-            color: var(--white);
+        .btn-success, .btn-danger {
             border: none;
             border-radius: var(--border-radius);
             padding: 8px 12px;
@@ -172,8 +174,9 @@
             box-shadow: var(--shadow-light);
         }
 
-        .btn-success i {
-            font-size: 1.2rem; /* Tamaño de íconos fijo */
+        .btn-success {
+            background-color: var(--black);
+            color: var(--white);
         }
 
         .btn-success:hover {
@@ -183,22 +186,6 @@
         .btn-danger {
             background-color: var(--red);
             color: var(--white);
-            border: none;
-            border-radius: var(--border-radius);
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-weight: 600;
-            box-shadow: var(--shadow-light);
-        }
-
-        .btn-danger i {
-            font-size: 1.2rem; /* Tamaño de íconos fijo */
         }
 
         .btn-danger:hover {
