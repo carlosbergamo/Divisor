@@ -38,7 +38,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 0 16px;
+            padding: 0 20px;
         }
 
         .container {
@@ -47,7 +47,7 @@
             background: var(--white);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-light);
-            padding: 16px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -55,7 +55,7 @@
 
         h1 {
             text-align: center;
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: var(--dark-gray);
             font-family: var(--title-font);
             font-weight: 800;
@@ -65,17 +65,16 @@
 
         .form-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            align-items: flex-end;
+            gap: 16px;
         }
 
-        .form-group > div, .form-group button {
-            flex: 1 1 calc(50% - 8px);
+        .form-group > div {
+            flex: 1;
         }
 
         .form-group button {
-            height: 40px;
-            width: auto;
+            height: 48px;
             background-color: var(--black);
             color: var(--white);
             border: none;
@@ -102,8 +101,8 @@
         }
 
         .reset-button {
-            height: 40px;
-            width: 40px;
+            height: 48px;
+            width: 48px;
             background-color: var(--red);
             color: var(--white);
             border: none;
@@ -156,7 +155,9 @@
             color: var(--dark-gray);
         }
 
-        .btn-success, .btn-danger {
+        .btn-success {
+            background-color: var(--black);
+            color: var(--white);
             border: none;
             border-radius: var(--border-radius);
             padding: 8px 12px;
@@ -171,9 +172,8 @@
             box-shadow: var(--shadow-light);
         }
 
-        .btn-success {
-            background-color: var(--black);
-            color: var(--white);
+        .btn-success i {
+            font-size: 1.2rem;
         }
 
         .btn-success:hover {
@@ -183,6 +183,22 @@
         .btn-danger {
             background-color: var(--red);
             color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            box-shadow: var(--shadow-light);
+        }
+
+        .btn-danger i {
+            font-size: 1.2rem;
         }
 
         .btn-danger:hover {
@@ -224,45 +240,50 @@
             color: var(--dark-gray);
         }
 
-        /* Responsivo para tablets y celulares */
-        @media (max-width: 768px) {
-            .form-group button span,
-            .actions button span {
-                display: none;
-            }
-
-            .btn-success i, .btn-danger i, .form-group button i {
-                font-size: 1.2rem;
-            }
-
-            .btn-success, .btn-danger {
-                gap: 0;
-                width: 48px;
-                height: 48px;
-                padding: 0;
-            }
-        }
-
+        /* Responsivo: Pantallas pequeñas */
         @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem; /* Reducir tamaño del título */
+            }
+
             .form-group {
                 flex-direction: column;
-                gap: 8px;
+                gap: 12px; /* Menor espacio */
             }
 
             input {
-                font-size: 0.9rem;
-                padding: 8px;
+                padding: 10px;
+                font-size: 0.9rem; /* Reducir tamaño del texto */
+            }
+
+            .form-group button {
+                height: 36px;
+                font-size: 0.85rem; /* Texto más pequeño */
+                gap: 6px;
+            }
+
+            .form-group button i {
+                font-size: 1rem;
+            }
+
+            table th, table td {
+                padding: 8px; /* Reducir espacio en la tabla */
+                font-size: 0.85rem; /* Texto más compacto */
             }
 
             .btn-success, .btn-danger, .reset-button {
-                font-size: 1rem;
                 height: 36px;
                 width: 36px;
                 padding: 0;
             }
 
-            .btn-success i, .btn-danger i, .form-group button i {
+            .btn-success i, .btn-danger i {
                 font-size: 0.9rem;
+            }
+
+            .results {
+                font-size: 0.9rem;
+                padding: 12px;
             }
         }
     </style>
@@ -306,13 +327,10 @@
 
         <!-- Contenedor de Resultados -->
         <div class="results-container">
-            <!-- Contenedor para Total Gastos y Promedio -->
             <div class="results">
                 <div id="total-expenses">Total Gastos: $0.00</div>
                 <div id="average-per-person">Promedio por persona: $0.00</div>
             </div>
-
-            <!-- Contenedor para Deudas -->
             <div class="results balances" id="balances">
                 <p>No hay gastos registrados.</p>
             </div>
@@ -321,144 +339,5 @@
 
     <!-- Footer -->
     <footer>Aplicación creada por <span>Charlie Bérgamo</span></footer>
-
-    <script>
-        let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-        let editingIndex = -1;
-
-        function addExpense() {
-            const name = document.getElementById("name").value.trim();
-            const amount = parseFloat(document.getElementById("amount").value);
-
-            if (!name || isNaN(amount)) {
-                alert("Por favor, completa todos los campos correctamente.");
-                return;
-            }
-
-            if (editingIndex !== -1) {
-                expenses[editingIndex] = { name, amount };
-                editingIndex = -1;
-            } else {
-                const existingIndex = expenses.findIndex(expense => expense.name === name);
-                if (existingIndex !== -1) {
-                    expenses[existingIndex].amount += amount;
-                } else {
-                    expenses.push({ name, amount });
-                }
-            }
-
-            localStorage.setItem("expenses", JSON.stringify(expenses));
-            renderExpenses();
-            clearForm();
-        }
-
-        function clearForm() {
-            document.getElementById("name").value = "";
-            document.getElementById("amount").value = "";
-        }
-
-        function resetExpenses() {
-            expenses = [];
-            localStorage.removeItem("expenses");
-            renderExpenses();
-        }
-
-        function renderExpenses() {
-            const table = document.getElementById("expenses-table");
-            const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-            const average = total / expenses.length;
-
-            table.innerHTML = "";
-
-            expenses.forEach((expense, index) => {
-                const balance = expense.amount - average;
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${expense.name}</td>
-                    <td>$${expense.amount.toFixed(2)}</td>
-                    <td>${balance >= 0 ? "+" : ""}$${balance.toFixed(2)}</td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn-success" onclick="editExpense(${index})">
-                                <i class="fas fa-edit"></i><span> Editar</span>
-                            </button>
-                            <button class="btn-danger" onclick="deleteExpense(${index})">
-                                <i class="fas fa-times"></i><span> Eliminar</span>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                table.appendChild(row);
-            });
-
-            calculateResults();
-        }
-
-        function deleteExpense(index) {
-            expenses.splice(index, 1);
-            localStorage.setItem("expenses", JSON.stringify(expenses));
-            renderExpenses();
-        }
-
-        function editExpense(index) {
-            const expense = expenses[index];
-            document.getElementById("name").value = expense.name;
-            document.getElementById("amount").value = expense.amount;
-            editingIndex = index;
-        }
-
-        function calculateResults() {
-            const totalExpensesElement = document.getElementById("total-expenses");
-            const averagePerPersonElement = document.getElementById("average-per-person");
-            const balancesElement = document.getElementById("balances");
-
-            if (expenses.length === 0) {
-                totalExpensesElement.innerHTML = "Total Gastos: $0.00";
-                averagePerPersonElement.innerHTML = "Promedio por persona: $0.00";
-                balancesElement.innerHTML = "<p>No hay gastos registrados.</p>";
-                return;
-            }
-
-            const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-            const average = total / expenses.length;
-
-            totalExpensesElement.innerHTML = `Total Gastos: $${total.toFixed(2)}`;
-            averagePerPersonElement.innerHTML = `Promedio por persona: $${average.toFixed(2)}`;
-
-            const debtors = expenses
-                .filter(expense => expense.amount < average)
-                .map(debtor => ({
-                    name: debtor.name,
-                    balance: average - debtor.amount,
-                }));
-
-            const creditors = expenses
-                .filter(expense => expense.amount > average)
-                .map(creditor => ({
-                    name: creditor.name,
-                    balance: creditor.amount - average,
-                }));
-
-            let balancesText = "";
-
-            debtors.forEach(debtor => {
-                let remainingDebt = debtor.balance;
-                creditors.forEach(creditor => {
-                    if (remainingDebt > 0 && creditor.balance > 0) {
-                        const payment = Math.min(remainingDebt, creditor.balance);
-                        balancesText += `<p>${debtor.name} debe $${payment.toFixed(
-                            2
-                        )} a ${creditor.name}</p>`;
-                        remainingDebt -= payment;
-                        creditor.balance -= payment;
-                    }
-                });
-            });
-
-            balancesElement.innerHTML = balancesText || "<p>No hay deudas.</p>";
-        }
-
-        renderExpenses();
-    </script>
 </body>
 </html>
